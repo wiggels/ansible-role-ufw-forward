@@ -12,15 +12,12 @@
 *nat
 :PREROUTING ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
-
 # PORT FORWARDS
 {% for f in ufw_forward_rules %}
 -A PREROUTING -i {{ ufw_forward_interface }} -p {{ f.type }} -m {{ f.type }} --dport {{ f.src_port }} -j DNAT --to-destination {{ f.dst_ip }}:{{ f.dst_port }}
 {% endfor %}
-
 # POSTROUTING MASQ
 -A POSTROUTING -o {{ ufw_forward_interface }} -j MASQUERADE
-
 COMMIT
 
 # Don't delete these required lines, otherwise there will be errors
