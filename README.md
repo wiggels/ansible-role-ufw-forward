@@ -33,7 +33,7 @@ You must either be root or `become: yes` in order to
           vars:
             - ufw_forward_interface: ens192
             - ufw_forward_rules:
-                - src_ip: 10.0.0.1
+                - type: tcp
                   src_port: 80
                   dst_ip: 127.0.0.1
                   dst_port: 8080
