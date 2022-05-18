@@ -1,0 +1,21 @@
+galaxy_info:
+  author: Hunter Wigelsworth
+  description: Configure port forwarding in UFW
+
+  license: MIT
+
+  min_ansible_version: 2.9
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+
+  galaxy_tags:
+    - ubuntu
+    - ufw
+    - forward
+
+dependencies: []
+  

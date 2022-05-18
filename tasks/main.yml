@@ -1,0 +1,47 @@
+---
+- name: Enable forward policy
+  ansible.builtin.lineinfile:
+    path: /etc/default/ufw
+    regexp: '^DEFAULT_FORWARD_POLICY'
+    line: 'DEFAULT_FORWARD_POLICY="ACCEPT"'
+  become: yes
+  notify:
+    - restart ufw
+
+- name: Enable ip forward
+  ansible.builtin.lineinfile:
+    path: /etc/ufw/sysctl.conf
+    regexp: '{{ item | regex_escape() }}'
+    line: "{{ item }}=1"
+  become: yes
+  with_items: ["net/ipv4/ip_forward"]
+  notify:
+    - restart ufw
+
+- name: Enable localnet route
+  ansible.builtin.lineinfile:
+    path: /etc/ufw/sysctl.conf
+    regexp: '{{ "net/ipv4/conf/" + ufw_forward_interface + "/route_localnet" | regex_escape() }}'
+    line: "net/ipv4/conf/{{ ufw_forward_interface }}/route_localnet=1"
+  become: yes
+  notify:
+    - restart ufw
+
+- name: Insert nat rules
+  ansible.builtin.blockinfile:
+    path: /etc/ufw/before.rules
+    insertbefore: BOF
+    block: |
+      *nat
+      :PREROUTING ACCEPT [0:0]
+      :POSTROUTING ACCEPT [0:0]
+      {% for item in ufw_forward_rules %}
+      # Redirect {{ item.src_ip }}:{{ item.src_port }} --> {{ item.dst_ip }}:{{ item.dst_port }}
+      -A PREROUTING -j DNAT -i {{ forward_interface }} -p tcp --dport {{ item.src_port }} --to-destination {{ item.dst_ip }}:{{ item.dst_port }}
+      -A POSTROUTING -j SNAT -p tcp -d {{ item.dst_ip }} --dport {{ item.dst_port }} --to-source {{ item.src_ip }}:{{ item.src_port }}
+      {% endfor %}
+      COMMIT
+    state: present
+  become: yes
+  notify:
+    - restart ufw
