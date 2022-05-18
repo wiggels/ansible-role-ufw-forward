@@ -29,7 +29,7 @@ You must either be root or `become: yes` in order to
       tasks:
         - name: Configure port forwarding
           ansible.builtin.include_role: 
-            name: wiggels.ufw-forward
+            name: wiggels.ufw_forward
           vars:
             - ufw_forward_interface: ens192
             - ufw_forward_rules:

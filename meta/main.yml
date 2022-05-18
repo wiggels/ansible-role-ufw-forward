@@ -1,5 +1,5 @@
 galaxy_info:
-  role_name: ufw-forward
+  role_name: ufw_forward
   author: Hunter Wigelsworth
   description: Configure port forwarding in UFW
 
