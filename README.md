@@ -23,20 +23,20 @@ Dependencies
 Example Playbook
 ----------------
 
-You must either be root or `become: yes` in order to 
+You must either be root or `become: true` in order to
 
     - hosts: all
       tasks:
         - name: Configure port forwarding
-          ansible.builtin.include_role: 
+          ansible.builtin.include_role:
             name: wiggels.ufw_forward
           vars:
-            - ufw_forward_interface: ens192
-            - ufw_forward_rules:
-                - type: tcp
-                  src_port: 80
-                  dst_ip: 127.0.0.1
-                  dst_port: 8080
+            ufw_forward_interface: ens192
+            ufw_forward_rules:
+              - type: tcp
+                src_port: 80
+                dst_ip: 127.0.0.1
+                dst_port: 8080
 
 License
 -------

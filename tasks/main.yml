@@ -4,7 +4,7 @@
     path: /etc/default/ufw
     regexp: '^DEFAULT_FORWARD_POLICY'
     line: 'DEFAULT_FORWARD_POLICY="ACCEPT"'
-  become: yes
+  become: true
   notify:
     - restart ufw
 
@@ -13,7 +13,7 @@
     path: /etc/ufw/sysctl.conf
     regexp: "{{ 'net/ipv4/ip_forward' | regex_escape() }}"
     line: "net/ipv4/ip_forward=1"
-  become: yes
+  become: true
   notify:
     - restart ufw
 
@@ -22,7 +22,7 @@
     path: /etc/ufw/sysctl.conf
     regexp: "{{ 'net/ipv4/conf/' + ufw_forward_interface + '/route_localnet' | regex_escape() }}"
     line: "net/ipv4/conf/{{ ufw_forward_interface }}/route_localnet=1"
-  become: yes
+  become: true
   notify:
     - restart ufw
 
@@ -33,6 +33,6 @@
     owner: root
     group: root
     mode: '0640'
-  become: yes
+  become: true
   notify:
     - restart ufw

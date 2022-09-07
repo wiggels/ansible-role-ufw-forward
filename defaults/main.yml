@@ -1,2 +1,3 @@
 ---
 # defaults file for ufw-forward
+ufw_masquerade: true
