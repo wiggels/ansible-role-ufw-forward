@@ -19,7 +19,6 @@ See the example below for further explaination.
 Dependencies
 ------------
 
-
 Example Playbook
 ----------------
 
